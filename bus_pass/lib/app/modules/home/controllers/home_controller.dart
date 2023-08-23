@@ -1,3 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {}
+class HomeController extends GetxController {
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  TextEditingController titleController = TextEditingController();
+  final textfieldDeco = InputDecoration(
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF5A5A5A), width: .8),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF5A5A5A), width: .8),
+      ),
+      contentPadding: const EdgeInsets.all(15),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF5A5A5A), width: .8),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF5A5A5A), width: .8),
+      ),
+      hintText: 'Enter Pass ID...',
+      hintStyle: TextStyle(
+        fontSize: 17.sp,
+        fontFamily: 'Montserrat SemiBold',
+        color: const Color(0xffADADAD),
+      ));
+}

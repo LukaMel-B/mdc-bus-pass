@@ -11,6 +11,7 @@ void main() {
         minTextAdapt: true,
         builder: (context, child) {
           return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
             title: "Application",
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,

@@ -10,6 +10,7 @@ dependencies:
   get: 4.6.5
   flutter_screenutil: 5.9.0
   flutter_svg: 2.0.7
+  url_launcher: 6.1.12
   flutter: 
     sdk: flutter
 
@@ -19,5 +20,23 @@ dev_dependencies:
     sdk: flutter
 
 flutter: 
-  uses-material-design: true
+  assets: 
+    - assets/
+    - assets/images/
+  fonts: 
+    - family: Montserrat
+      fonts: 
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Montserrat Bold
+      fonts: 
+        - asset: assets/fonts/Montserrat-Bold.ttf
+    - family: Montserrat Medium
+      fonts: 
+        - asset: assets/fonts/Montserrat-Medium.ttf
+    - family: Montserrat SemiBold
+      fonts: 
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+    - family: Montserrat Black
+      fonts: 
+        - asset: assets/fonts/Montserrat-Black.ttf
 
