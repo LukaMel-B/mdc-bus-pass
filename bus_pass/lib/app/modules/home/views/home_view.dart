@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:bus_pass/app/data/providers/bus_pass_provider.dart';
 import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -135,48 +135,80 @@ class HomeView extends GetView<HomeController> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 1.8,
-                            child: TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              enableInteractiveSelection: true,
-                              controller: controller.titleController,
-                              validator: ((value) {
-                                if (value!.isEmpty) {
-                                  return "Id is required!";
-                                } else {
-                                  return null;
-                                }
-                              }),
-                              decoration: controller.textfieldDeco,
+                            child: Form(
+                              key: controller.formKey,
+                              child: TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                enableInteractiveSelection: true,
+                                controller: controller.bussPassController,
+                                validator: ((value) {
+                                  if (value!.isEmpty) {
+                                    return "Id is required!";
+                                  } else {
+                                    return null;
+                                  }
+                                }),
+                                decoration: controller.textfieldDeco,
+                                keyboardType: TextInputType.number,
+                              ),
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xffCEEBD7),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.transparent,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 18.h, horizontal: 20.w),
-                                elevation: 7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                          GetBuilder<HomeController>(builder: (controller) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xffCEEBD7),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (!controller.loading.value) {
+                                    if (controller.formKey.currentState!
+                                        .validate()) {
+                                      controller.loading.value = true;
+                                      controller.loadingOn();
+                                      final passId = controller
+                                          .bussPassController.text
+                                          .trim();
+                                      await BusPassProvider()
+                                          .getBusPass(passId, context);
+                                    }
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: Colors.transparent,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: controller.visibleH.value,
+                                      horizontal: controller.visibleW.value),
+                                  elevation: 7,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  backgroundColor: Colors.transparent,
                                 ),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                backgroundColor: Colors.transparent,
+                                child: Obx(() {
+                                  return (controller.loading.value)
+                                      ? Transform.scale(
+                                          scale: 0.6,
+                                          child:
+                                              const CircularProgressIndicator(
+                                            color: Colors.black,
+                                            strokeWidth: 1.7,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Submit',
+                                          style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontFamily: 'Montserrat Bold',
+                                              color: Colors.black),
+                                        );
+                                }),
                               ),
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontFamily: 'Montserrat Bold',
-                                    color: Colors.black),
-                              ),
-                            ),
-                          )
+                            );
+                          })
                         ],
                       ),
                     ],

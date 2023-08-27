@@ -4,8 +4,25 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
+  var isVisible = false.obs;
+  var loading = false.obs;
+  var visibleH = 18.h.obs;
+  var visibleW = 20.w.obs;
+  loadingOn() {
+    isVisible.value = true;
+    visibleH.value = 8.h;
+    visibleW.value = 32.w;
+    update();
+  }
 
-  TextEditingController titleController = TextEditingController();
+  loadingOff() {
+    isVisible.value = false;
+    visibleH.value = 18.h;
+    visibleW.value = 20.w;
+    update();
+  }
+
+  TextEditingController bussPassController = TextEditingController();
   final textfieldDeco = InputDecoration(
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),

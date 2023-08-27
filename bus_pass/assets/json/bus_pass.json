@@ -1,0 +1,10 @@
+{
+  "Bus_Pass": "Valid Pass",
+  "student": {
+    "student_name": "GopiKrishna",
+    "year_of_join": 2017,
+    "valid_till": "2024-03-31",
+    "boarding_place": "main gate",
+    "pass_id": 1116
+  }
+}
