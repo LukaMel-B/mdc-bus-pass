@@ -2,10 +2,10 @@ name: bus_pass
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: 
-  sdk: '>=3.1.0 <4.0.0'
+environment:
+  sdk: ">=3.1.0 <4.0.0"
 
-dependencies: 
+dependencies:
   cupertino_icons: ^1.0.2
   get: 4.6.5
   flutter_screenutil: 5.9.0
@@ -13,32 +13,33 @@ dependencies:
   url_launcher: 6.1.12
   http: 1.1.0
   font_awesome_flutter: 10.5.0
-  flutter: 
+  intl: 0.18.1
+  qr_code_scanner: 1.0.1
+  flutter:
     sdk: flutter
 
-dev_dependencies: 
+dev_dependencies:
   flutter_lints: ^2.0.0
-  flutter_test: 
+  flutter_test:
     sdk: flutter
 
-flutter: 
-  assets: 
+flutter:
+  assets:
     - assets/
     - assets/images/
-  fonts: 
+  fonts:
     - family: Montserrat
-      fonts: 
+      fonts:
         - asset: assets/fonts/Montserrat-Regular.ttf
     - family: Montserrat Bold
-      fonts: 
+      fonts:
         - asset: assets/fonts/Montserrat-Bold.ttf
     - family: Montserrat Medium
-      fonts: 
+      fonts:
         - asset: assets/fonts/Montserrat-Medium.ttf
     - family: Montserrat SemiBold
-      fonts: 
+      fonts:
         - asset: assets/fonts/Montserrat-SemiBold.ttf
     - family: Montserrat Black
-      fonts: 
+      fonts:
         - asset: assets/fonts/Montserrat-Black.ttf
-

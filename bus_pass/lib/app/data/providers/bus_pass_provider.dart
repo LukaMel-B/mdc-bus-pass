@@ -4,47 +4,44 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:bus_pass/app/data/models/bus_pass_model.dart';
 import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
-import 'package:bus_pass/app/modules/home/controllers/scanner_controller.dart';
+import 'package:bus_pass/app/modules/home/controllers/details_controller.dart';
 import 'package:bus_pass/app/modules/home/views/pass_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 class BusPassProvider extends GetConnect {
-  ScannerController scannerController = Get.find();
+  DetailsController scannerController = Get.find();
   HomeController homeController = Get.find();
-  getBusPass(String id, BuildContext context) async {
+  Future<void> getBusPass(String id, BuildContext context) async {
     try {
       final response = await http.post(
-          Uri.parse('https://app.conext.in/bus_pass/checker/'),
-          body: {'pass_id': id});
+        Uri.parse('https://app.conext.in/bus_pass/checker/'),
+        body: {'pass_id': id},
+      );
+
+      final responseData = jsonDecode(response.body);
       log(response.body.toString());
-      var data = jsonDecode(response.body.toString());
-      if (data['Bus_Pass'].toString() != "No Such Pass Alloted") {
-        BusPass busPass = busPassFromJson(response.body);
-        scannerController.busPass = busPass.student;
+
+      if (responseData['Bus_Pass'] != "No Such Pass Alloted") {
+        final busPass = busPassFromJson(response.body);
+        scannerController.busPass = busPass;
+
         SnackbarMessage()
-            .snackBarMessage('Your pass send successfully', context);
+            .snackBarMessage('Your pass sent successfully', context);
         Get.to(() => const PassDetailsView());
-        homeController.loading.value = false;
-        homeController.loadingOff();
-      } else if ('Error: ${data['Bus_Pass'].toString()}' ==
-          "No Such Pass Alloted") {
-        var data = jsonDecode(response.body.toString());
-        SnackbarMessage()
-            .snackBarMessage((data['Bus_Pass'].toString()), context);
-        homeController.loading.value = false;
-        homeController.loadingOff();
+        homeController.bussPassController.clear();
       } else {
-        SnackbarMessage()
-            .snackBarMessage((data['Bus_Pass'].toString()), context);
-        homeController.loading.value = false;
-        homeController.loadingOff();
+        final errorMessage = responseData['Bus_Pass'] as String;
+        SnackbarMessage().snackBarMessage(errorMessage, context);
       }
     } catch (e) {
       log(e.toString());
       SnackbarMessage().snackBarMessage(
-          'Oops! something went wrong! Check again and try', context);
+        'Oops! Something went wrong! Check again and try',
+        context,
+      );
+    } finally {
       homeController.loading.value = false;
       homeController.loadingOff();
     }

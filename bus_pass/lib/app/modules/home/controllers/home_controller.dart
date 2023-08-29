@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class HomeController extends GetxController {
+  Barcode? result;
+  String scannedData = '';
   GlobalKey<FormState> formKey = GlobalKey();
   var isVisible = false.obs;
   var loading = false.obs;

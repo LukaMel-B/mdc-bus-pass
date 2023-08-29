@@ -13,7 +13,7 @@ class TableRowWidget extends GetView {
     return Row(
       children: [
         SizedBox(
-          width: screenSize / 1.5,
+          width: screenSize / 2.5,
           child: Text(
             title,
             style: TextStyle(

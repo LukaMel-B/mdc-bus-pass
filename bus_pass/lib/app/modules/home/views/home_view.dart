@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:bus_pass/app/data/providers/bus_pass_provider.dart';
 import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
+import 'package:bus_pass/app/modules/home/views/scanner_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -83,22 +87,36 @@ class HomeView extends GetView<HomeController> {
                       SizedBox(
                         height: 40.h,
                       ),
-                      SvgPicture.asset(
-                        'assets/images/scanner.svg',
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        'Scan QR',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Montserrat Bold',
-                          fontSize: 21.sp,
+                      GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                          Get.to(
+                            () => const ScannerView(),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/scanner.svg',
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              'Scan QR',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Montserrat Bold',
+                                fontSize: 21.sp,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 30.h,
                       ),
                       Text(
                         'OR',
@@ -172,6 +190,7 @@ class HomeView extends GetView<HomeController> {
                                           .trim();
                                       await BusPassProvider()
                                           .getBusPass(passId, context);
+                                      FocusScope.of(context).unfocus();
                                     }
                                   }
                                 },
