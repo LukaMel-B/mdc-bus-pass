@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'package:bus_pass/app/data/providers/bus_pass_provider.dart';
+import 'package:bus_pass/app/modules/home/bindings/home_binding.dart';
 import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
 import 'package:bus_pass/app/modules/home/views/scanner_view.dart';
 import 'package:flutter/material.dart';
@@ -92,9 +93,8 @@ class HomeView extends GetView<HomeController> {
                           FocusScope.of(context).unfocus();
                           SystemChannels.textInput
                               .invokeMethod('TextInput.hide');
-                          Get.to(
-                            () => const ScannerView(),
-                          );
+                          Get.to(() => const ScannerView(),
+                              binding: ScannerBinding());
                         },
                         child: Column(
                           children: [
@@ -156,8 +156,6 @@ class HomeView extends GetView<HomeController> {
                             child: Form(
                               key: controller.formKey,
                               child: TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
                                 enableInteractiveSelection: true,
                                 controller: controller.bussPassController,
                                 validator: ((value) {

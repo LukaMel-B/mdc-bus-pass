@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:bus_pass/app/modules/home/bindings/home_binding.dart';
 import 'package:bus_pass/app/modules/home/controllers/details_controller.dart';
 import 'package:bus_pass/app/modules/home/views/scanner_view.dart';
 import 'package:bus_pass/app/modules/home/widgets/table_row.dart';
@@ -92,12 +93,13 @@ class PassDetailsView extends GetView<DetailsController> {
               },
               itemCount: controller.titleList.length,
             ),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: 50.h,
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => const ScannerView());
+                Get.back();
+                Get.to(() => const ScannerView(), binding: ScannerBinding());
               },
               child: Column(
                 children: [

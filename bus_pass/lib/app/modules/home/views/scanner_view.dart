@@ -1,88 +1,59 @@
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:bus_pass/app/modules/home/controllers/scanner_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class ScannerView extends StatefulWidget {
+class ScannerView extends GetView<ScannerController> {
   const ScannerView({Key? key}) : super(key: key);
-
-  @override
-  State<ScannerView> createState() => _ScannerViewState();
-}
-
-class _ScannerViewState extends State<ScannerView> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  String scannedData = '';
-  QRViewController? qrController;
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      qrController!.pauseCamera();
-    }
-    qrController!.resumeCamera();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (qrController != null && mounted) {
-      qrController!.pauseCamera();
-      qrController!.resumeCamera();
-    }
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black54,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: const Text('Scan Bus Pass QR'),
-        ),
-        backgroundColor: Colors.black54,
+    return WillPopScope(
+      onWillPop: () async {
+        controller.onClose();
+
+        log('willpop');
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
         body: Column(
           children: [
             Expanded(
-              flex: 5,
               child: QRView(
-                key: qrKey,
-                onQRViewCreated: onQRView,
+                key: controller.qrKey,
+                onQRViewCreated: controller.onQRViewCreated,
                 overlay: QrScannerOverlayShape(
-                    borderColor: Colors.teal[200]!,
-                    borderRadius: 10,
-                    borderLength: 30,
-                    borderWidth: 10,
-                    cutOutSize: scanArea),
+                  borderColor: Colors.teal[200]!,
+                  borderRadius: 10,
+                  borderLength: 30,
+                  borderWidth: 10,
+                ),
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Text(scannedData),
-            )
+            GetBuilder<ScannerController>(builder: (getController) {
+              getController.getDetails(context);
+              return Visibility(
+                visible: controller.isVisible,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30.h),
+                    child: Transform.scale(
+                      scale: 0.9,
+                      child: const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            })
           ],
-        ));
-  }
-
-  void onQRView(QRViewController qrViewController) {
-    qrViewController = qrController!;
-    qrViewController.scannedDataStream.listen((data) {
-      setState(() {
-        result = data;
-        scannedData = data.code!;
-        log(scannedData);
-      });
-    });
-    qrController!.pauseCamera();
-    qrController!.resumeCamera();
-  }
-
-  @override
-  void dispose() {
-    qrController?.dispose();
-    log('dispose worked');
-    super.dispose();
+        ),
+      ),
+    );
   }
 }
