@@ -6,6 +6,7 @@ import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
 import 'package:bus_pass/app/modules/home/views/pass_details_view.dart';
 import 'package:bus_pass/app/modules/scanner/controllers/scanner_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -28,13 +29,14 @@ class BusPassProvider extends GetConnect {
           homeController.bussPassController.clear();
         } else {
           final errorMessage = responseData['Bus_Pass'] as String;
-          SnackbarMessage().snackBarMessage(errorMessage, context);
+          SnackbarMessage()
+              .snackBarMessage('$errorMessage, Try again', context);
           falseDatas.add(id);
           homeController.bussPassController.clear();
         }
       } catch (e) {
         SnackbarMessage().snackBarMessage(
-          'Oops! Something went wrong! Check again and try',
+          'Invalid QR or Network error, Try again',
           context,
         );
         falseDatas.add(id);
@@ -61,14 +63,14 @@ class BusPassProvider extends GetConnect {
         } else {
           final errorMessage = responseData['Bus_Pass'] as String;
           SnackbarMessage()
-              .snackBarMessage('$errorMessage, Try again', context);
+              .snackBarMessage('$errorMessage! Try again', context);
           scannerController.isVisible = false;
           scannerController.update();
           falseDatas.add(id);
         }
       } catch (e) {
         SnackbarMessage().snackBarMessage(
-          'Invalid QR or Network error, Try again',
+          'Invalid QR or Network Error! Try again',
           context,
         );
         scannerController.isVisible = false;
@@ -84,12 +86,66 @@ class BusPassProvider extends GetConnect {
 
 class SnackbarMessage {
   snackBarMessage(String message, BuildContext context) {
-    SnackBar snackBar = SnackBar(
-      behavior: SnackBarBehavior.fixed,
-      content: Text(message),
-      backgroundColor: const Color(0xff1E1E1E),
-      duration: const Duration(seconds: 4),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            elevation: 3,
+            backgroundColor: const Color(0xffffffff),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 25),
+                Text(
+                  'Error!!!',
+                  style: TextStyle(
+                      fontSize: 25.sp,
+                      fontFamily: 'Montserrat Bold',
+                      color: const Color(0xFFDB1C0E)),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  message,
+                  style: TextStyle(
+                      fontSize: 15.sp,
+                      fontFamily: 'Montserrat SemiBold',
+                      color: const Color(0xDD0C0C0C)),
+                ),
+                const SizedBox(height: 20),
+                const Divider(
+                  color: Colors.black45,
+                  thickness: .5,
+                  height: .2,
+                ),
+                InkWell(
+                  highlightColor: Colors.grey[200],
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontFamily: 'Montserrat SemiBold',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

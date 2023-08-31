@@ -43,3 +43,4 @@ flutter:
     - family: Montserrat Black
       fonts:
         - asset: assets/fonts/Montserrat-Black.ttf
+  uses-material-design: true
