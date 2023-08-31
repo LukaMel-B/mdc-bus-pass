@@ -30,6 +30,7 @@ class BusPassProvider extends GetConnect {
           final errorMessage = responseData['Bus_Pass'] as String;
           SnackbarMessage().snackBarMessage(errorMessage, context);
           falseDatas.add(id);
+          homeController.bussPassController.clear();
         }
       } catch (e) {
         SnackbarMessage().snackBarMessage(
