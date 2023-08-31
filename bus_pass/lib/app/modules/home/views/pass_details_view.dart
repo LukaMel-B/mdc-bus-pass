@@ -1,8 +1,6 @@
-import 'dart:developer';
-import 'package:bus_pass/app/modules/home/bindings/home_binding.dart';
-import 'package:bus_pass/app/modules/home/controllers/details_controller.dart';
-import 'package:bus_pass/app/modules/home/views/scanner_view.dart';
+import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
 import 'package:bus_pass/app/modules/home/widgets/table_row.dart';
+import 'package:bus_pass/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class PassDetailsView extends GetView<DetailsController> {
+class PassDetailsView extends GetView<HomeController> {
   const PassDetailsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -99,7 +97,7 @@ class PassDetailsView extends GetView<DetailsController> {
             GestureDetector(
               onTap: () {
                 Get.back();
-                Get.to(() => const ScannerView(), binding: ScannerBinding());
+                Get.toNamed(Routes.SCANNER);
               },
               child: Column(
                 children: [
@@ -134,7 +132,6 @@ class PassDetailsView extends GetView<DetailsController> {
       controller.busPass!.student.boardingPlace,
       DateFormat.yMMMd().format(controller.busPass!.student.validTill),
     ];
-    log(titleList[index].toString());
     return TableRowWidget(
         title: controller.titleList[index], text: titleList[index].toString());
   }

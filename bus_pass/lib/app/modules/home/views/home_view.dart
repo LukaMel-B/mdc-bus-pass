@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'package:bus_pass/app/data/providers/bus_pass_provider.dart';
-import 'package:bus_pass/app/modules/home/bindings/home_binding.dart';
 import 'package:bus_pass/app/modules/home/controllers/home_controller.dart';
-import 'package:bus_pass/app/modules/home/views/scanner_view.dart';
+import 'package:bus_pass/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +15,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     double screenSize = MediaQuery.of(context).size.height;
-    double containerSize = screenSize / 1.4;
+
     double spacerSize = screenSize * .05;
     return Scaffold(
         backgroundColor: const Color(0xffCEEBD7),
@@ -47,9 +45,7 @@ class HomeView extends GetView<HomeController> {
           ],
         ),
         body: SingleChildScrollView(
-          reverse: true,
-          physics:
-              const BouncingScrollPhysics(parent: FixedExtentScrollPhysics()),
+          physics: const BouncingScrollPhysics(parent: ClampingScrollPhysics()),
           child: Wrap(
             runSpacing: spacerSize,
             runAlignment: WrapAlignment.spaceBetween,
@@ -66,7 +62,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               Container(
-                height: containerSize,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -93,8 +88,7 @@ class HomeView extends GetView<HomeController> {
                           FocusScope.of(context).unfocus();
                           SystemChannels.textInput
                               .invokeMethod('TextInput.hide');
-                          Get.to(() => const ScannerView(),
-                              binding: ScannerBinding());
+                          Get.toNamed(Routes.SCANNER);
                         },
                         child: Column(
                           children: [
@@ -167,6 +161,11 @@ class HomeView extends GetView<HomeController> {
                                 }),
                                 decoration: controller.textfieldDeco,
                                 keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Montserrat SemiBold',
+                                  fontSize: 16.sp,
+                                ),
                               ),
                             ),
                           ),
@@ -228,6 +227,9 @@ class HomeView extends GetView<HomeController> {
                           })
                         ],
                       ),
+                      SizedBox(
+                        height: 120.h,
+                      )
                     ],
                   ),
                 ),
@@ -255,8 +257,6 @@ class HomeView extends GetView<HomeController> {
                     final Uri url = Uri(scheme: 'tel', path: '8086500023');
                     if (await canLaunchUrl(url)) {
                       await launchUrl(url);
-                    } else {
-                      log('cannot call');
                     }
                   },
                   style: ElevatedButton.styleFrom(

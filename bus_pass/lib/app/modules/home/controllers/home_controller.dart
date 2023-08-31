@@ -1,9 +1,18 @@
+import 'package:bus_pass/app/data/models/bus_pass_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class HomeController extends GetxController {
+  BusPass? busPass;
+  List<String> titleList = [
+    'Name:',
+    'Pass ID:',
+    'Year of Join:',
+    'Boarding Place:',
+    'Validity:'
+  ];
   Barcode? result;
   String scannedData = '';
   GlobalKey<FormState> formKey = GlobalKey();

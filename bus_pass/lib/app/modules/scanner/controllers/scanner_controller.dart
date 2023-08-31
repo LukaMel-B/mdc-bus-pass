@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bus_pass/app/data/providers/bus_pass_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,11 +8,11 @@ class ScannerController extends GetxController {
   Barcode? result;
   QRViewController? qrController;
   bool isVisible = false;
-  int timesChecked = 0;
   void onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((scanData) {
       result = scanData;
-      if (isVisible == false || BusPassProvider.isCorrectScan == 'Failed') {
+      if (isVisible == false &&
+          BusPassProvider.falseDatas.contains(scanData.code!) == false) {
         isVisible = true;
         update();
       }
@@ -22,7 +20,7 @@ class ScannerController extends GetxController {
   }
 
   getDetails(BuildContext context) async {
-    if (result!.code != null && timesChecked == 0) {
+    if (result!.code != null) {
       await BusPassProvider().getBusPassScan(result!.code!, context);
     }
   }
@@ -34,7 +32,6 @@ class ScannerController extends GetxController {
 
   @override
   void onClose() {
-    log('onclose working');
     isVisible = false;
     qrController?.dispose();
     super.onClose();

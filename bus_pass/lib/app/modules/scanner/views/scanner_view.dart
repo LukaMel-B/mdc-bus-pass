@@ -1,6 +1,4 @@
-import 'dart:developer';
-
-import 'package:bus_pass/app/modules/home/controllers/scanner_controller.dart';
+import 'package:bus_pass/app/modules/scanner/controllers/scanner_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,8 +11,6 @@ class ScannerView extends GetView<ScannerController> {
     return WillPopScope(
       onWillPop: () async {
         controller.onClose();
-
-        log('willpop');
         return true;
       },
       child: Scaffold(
